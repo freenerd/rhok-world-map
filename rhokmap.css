@@ -8,3 +8,11 @@ html, body {
   height: 100%;
   width: 100%;
 }
+
+img.logo {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  display: block;
+  z-index: 10000;
+}

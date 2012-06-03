@@ -1,7 +1,7 @@
 Locations = new Meteor.Collection("locations");
 LastUpdate = new Meteor.Collection("last_update");
 
-UPDATE_INTERVALL = 1000; // in seconds
+UPDATE_INTERVALL = 3600; // in seconds
 
 if (Meteor.is_client) {
   var geocoder;
@@ -11,9 +11,18 @@ if (Meteor.is_client) {
   var makeMarker = function(loc) {
     if(!loc.coordinates) return;
 
+    var pinColor = "AF83CC";
+    var pinImage = new google.maps.MarkerImage(
+      "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+      new google.maps.Size(21, 34),
+      new google.maps.Point(0,0),
+      new google.maps.Point(10, 34)
+    );
+
     var marker = new google.maps.Marker({
-     map: map,
-     position: new google.maps.LatLng(loc.coordinates[0], loc.coordinates[1])
+      map: map,
+      icon: pinImage,
+      position: new google.maps.LatLng(loc.coordinates[0], loc.coordinates[1])
     });
 
     google.maps.event.addListener(marker, 'click', function() {
@@ -41,7 +50,8 @@ if (Meteor.is_client) {
             if(!error) {
               makeMarker(loc)
             }
-          });
+          }
+        );
       }
     });
   };
@@ -72,6 +82,16 @@ if (Meteor.is_client) {
       geocoder = new google.maps.Geocoder();
       var latlng = new google.maps.LatLng(15.973349, 16.875);
       var myOptions = {
+        overviewMapControl: false,
+        mapTypeControl: false,
+        panControl: false,
+        rotateControl: false,
+        scaleControl: false,
+        zoomControl: true,
+        zoomControlOptions: { position: google.maps.ControlPosition.LEFT_BOTTOM },
+        streetViewControl: false,
+        scrollwheel: false,
+        maxZoom: 6,
         zoom: 2,
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
